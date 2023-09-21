@@ -1,0 +1,5 @@
+## Interface: 30300
+## Title: Seguimiento
+## Author: Matecitos
+## Notes: Un addon para seguimiento.
+Seguimiento.lua
