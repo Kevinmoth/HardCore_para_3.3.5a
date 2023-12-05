@@ -1,24 +1,32 @@
 local frame = CreateFrame("Frame")
 
--- une al jugador a un canal global de seguimiento(puede usarse para agregar verificaciones)
+local channelName = "canaldeseguimiento"
+
 local function UnirseAlCanalDeSeguimiento()
-    JoinChannelByName("canaldeseguimiento", nil, ChatFrame1:GetID())
+    JoinChannelByName(channelName, nil, ChatFrame1:GetID())
 end
 
--- se envia un mensaje al canal de siguimiento cuando el jugador inicie sesión.
+local function EnviarMensaje(mensaje, canal)
+    SendChatMessage(mensaje, "CHANNEL", nil, GetChannelName(canal))
+end
+
 local function EnviarMensajeDeInicioDeSesion()
-    SendChatMessage("¡Addon Hardcore activado!", "CHANNEL", nil, GetChannelName("canaldeseguimiento")) 
+    EnviarMensaje("¡Addon Hardcore activado!", channelName)
+end
+
+local function EnviarMensajeDeMuerte()
+    local playerName = UnitName("player")
+    SendChatMessage("¡" .. playerName .. " ha muerto!", "GUILD")
 end
 
 frame:RegisterEvent("PLAYER_LOGIN")
 frame:RegisterEvent("PLAYER_DEAD")
 
-frame:SetScript("OnEvent", function(self, event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10)
+frame:SetScript("OnEvent", function(self, event)
     if event == "PLAYER_LOGIN" then
         UnirseAlCanalDeSeguimiento()
         EnviarMensajeDeInicioDeSesion()
     elseif event == "PLAYER_DEAD" then
-        local playerName = UnitName("player")
-        SendChatMessage("¡" .. playerName .. " ha muerto!", "GUILD")
+        EnviarMensajeDeMuerte()
     end
 end)
